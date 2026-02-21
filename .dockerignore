@@ -1,4 +1,4 @@
-# 减小构建上下文，排除无关文件
+# 减小构建上下文，排除无关文件（勿用 *.txt 以免排除 requirements.txt）
 .git
 .gitignore
 __pycache__
@@ -8,8 +8,6 @@ __pycache__
 .cursor
 *.md
 docs/
-*.txt
-!requirements.txt
 build_docker.py
 *.tar
 data/
