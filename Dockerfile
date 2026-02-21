@@ -7,9 +7,9 @@ LABEL org.opencontainers.image.title="点点素材管理大师" \
 
 WORKDIR /app
 
-# 依赖
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 依赖（daemon 无需 GUI，用 requirements-docker 避免 ttkbootstrap/tk 在 slim 中安装失败）
+COPY requirements-docker.txt .
+RUN pip install --no-cache-dir -r requirements-docker.txt
 
 # 应用
 COPY media_organizer.py .
