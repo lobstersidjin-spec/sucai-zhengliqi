@@ -1,5 +1,2 @@
-# Docker/daemon 专用：仅媒体处理依赖，不含 GUI（ttkbootstrap 需 tk，slim 镜像中会失败）
+# Docker/daemon 专用：仅 Pillow。hachoir 已从 PyPI 下架，代码中可选
 Pillow>=9.0.0
-hachoir-core>=1.2
-hachoir-metadata>=1.2
-hachoir-parser>=1.2
