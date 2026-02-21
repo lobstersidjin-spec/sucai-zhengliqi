@@ -1,0 +1,52 @@
+点点素材管理大师 - 交付说明
+
+一、每次交付包含
+
+  1. 项目源码（完整仓库）
+  2. Docker 镜像 tar 包：sucai-zhengliqi-vX.Y.tar（如 v0.7）
+  3. 说明文档：docs/ 下 README.txt、使用说明.txt、Docker部署说明.txt
+
+二、开发者打包流程（镜像 tar 获取方式）
+
+  方式 A - GitHub Actions（推荐，无需本机安装 Docker）
+  1. 将代码推送到 GitHub 的 main 或 master 分支
+  2. 打开仓库 → Actions → 选择最新一次 "Build Docker Image" 运行
+  3. 运行完成后在页面底部 "Artifacts" 中下载 docker-image-sucai-zhengliqi（解压后即 sucai-zhengliqi-vX.Y.tar）
+  也可在 Actions 页点击 "Run workflow" 手动触发一次构建
+
+  方式 B - 本机构建（需已安装并运行 Docker）
+  1. 修改功能后，在 media_organizer.py 中递增 __version__（见 .cursor/rules/version-increment.mdc）
+  2. 执行：python build_docker.py
+  3. 在项目根目录得到 sucai-zhengliqi-vX.Y.tar，与源码一并交付
+
+三、用户导入与测试
+
+  1. 导入镜像
+     docker load -i sucai-zhengliqi-vX.Y.tar
+
+  2. 准备配置
+     创建 data 目录，放入 config.json，并配置 auto_copy：
+     {
+       "auto_copy": {
+         "enabled": true,
+         "watch_paths": ["/media"],
+         "target_path": "/data/target",
+         "poll_interval_sec": 60
+       }
+     }
+
+  3. 运行
+     方式 A - docker run：
+     docker run -d --name sucai-zhengliqi \
+       -v $(pwd)/data:/data \
+       -v /media:/media:ro \
+       sucai-zhengliqi:vX.Y
+
+     方式 B - docker-compose（推荐）：
+     将 docker-compose.yml 中 image 改为 sucai-zhengliqi:vX.Y，并注释 build，
+     然后执行：docker-compose up -d
+
+  4. 查看日志
+     docker logs -f sucai-zhengliqi
+
+  详细部署说明见 docs/Docker部署说明.txt。

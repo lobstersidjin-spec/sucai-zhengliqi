@@ -1,0 +1,63 @@
+点点素材管理大师 - 使用说明
+
+一、适用场景
+
+  - 文件夹里堆满了手机、相机、运动相机等拍的原始图片、视频、音频。
+  - 希望按拍摄日期和类型自动归类，且视频/图片再按拍摄设备分文件夹。
+  - 希望同名/同词干的关联文件（如 RAW 的 .xmp、视频的 .srt）一起被移到同一目标目录。
+
+二、整理规则简述
+
+  1. 只处理配置中的媒体扩展名
+     图片（.jpg/.heic/.raw 等）、视频（.mp4/.mov/.360/.insv 等）、音频（.mp3/.m4a 等）。其它扩展名不参与整理。
+
+  2. 保留原位的文件不移动
+     若扩展名在「保留原位」列表中（如 .op、.ed、.lrprev），或文件名以 .fg.op / .fg.ed 结尾，则不会被移动。
+
+  3. 分类层级
+     - 第一层：拍摄日期（如 2024-01-15），无法取得日期时归入「无日期」。
+     - 第二层：媒体种类 —— 图片 / 视频 / 全景视频 / 音频。
+     - 第三层（仅图片、视频、全景视频）：拍摄设备（如 Apple iPhone 14 Pro、未知设备）。
+
+  4. 关联文件
+     与主文件同目录、同词干（或词干加下划线/空格变体）的文件会一起移动到同一目标目录，例如：
+     - IMG_001.jpg + IMG_001.xmp
+     - 视频.mp4 + 视频.srt
+
+  5. 重复策略
+     目标目录已存在同名文件时，按 config.json 的 duplicate_strategy：跳过(skip)、覆盖(overwrite)或重命名(rename)。
+
+三、使用步骤
+
+  1. 配置
+     在 config.json 中设置 source_path、output_path（可不设，则原地建子目录），或首次在 GUI/命令行里选路径后会自动写回配置。
+
+  2. 建议先试运行
+     命令行加 --dry-run 或 GUI 勾选「试运行」，确认目标路径和移动列表无误后再正式运行。
+
+  3. 执行整理
+     运行 python run_scan.py（或带 --source/--output）或打开 python main.py：
+     - 勾选「试运行」点击「开始扫描」：仅扫描并出报告；
+     - 不勾选点击「开始整理」：执行整理并出任务报告。
+
+  4. 查看结果
+     整理记录与错误信息见 media_organizer.log；已处理路径见 processed_files.json。
+
+四、全景/360 视频
+
+  - 扩展名为 .360、.insv 等会归入「全景视频」。
+  - 若安装了 exiftool，会通过元数据（如 ProjectionType、Make/Model 含 360/Theta/Insta360）进一步识别全景视频。
+
+五、常见问题
+
+  - 日期不对
+    优先从 EXIF/QuickTime 等元数据读取；若无则按配置用文件修改时间等回退。安装 exiftool 可提高视频日期识别率。
+
+  - 设备显示「未知设备」
+    图片依赖 EXIF 的 Make/Model；视频依赖 exiftool。若未装 exiftool 或文件无设备信息，则显示为「未知设备」。
+
+  - 不想移动某些文件
+    将其扩展名加入 config.json 的 leave_in_place_extensions。
+
+  - 不想按设备分子目录
+    在 config.json 的 folder_structure 中设 "device_subfolder": false。

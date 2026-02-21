@@ -1,0 +1,24 @@
+# 点点素材管理大师 - NAS Docker 一键部署
+# 用法：
+#   1. 在 NAS 上创建目录，如 /volume1/docker/sucai-zhengliqi
+#   2. 将本仓库放入该目录，在 data 下放入 config.json，并设置 auto_copy.enabled=true、auto_copy.target_path="/data/target"、auto_copy.watch_paths=["/media"]
+#   3. 按需修改下方 volumes 中宿主机路径
+#   4. 执行 docker-compose up -d
+
+services:
+  sucai-zhengliqi:
+    build: .
+    image: sucai-zhengliqi:latest
+    # 使用预构建 tar 时：docker load 后执行 docker tag sucai-zhengliqi:vX.Y sucai-zhengliqi:latest
+    container_name: sucai-zhengliqi
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+      - CONFIG_DIR=/data
+    volumes:
+      # 持久化：配置、日志、已处理记录、拷贝目标 均在此目录
+      - ./data:/data
+      # 宿主机外接设备挂载点 → 容器 /media（检测到新设备后自动拷贝到 /data/target）
+      - /media:/media:ro
+    # 若 NAS 将 USB 挂到 /volume1/usb，可改为：- /volume1/usb:/media:ro
+    # 若希望拷贝到 NAS 其他目录，可增加：- /volume1/photo/imported:/data/target

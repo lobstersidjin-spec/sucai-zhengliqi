@@ -1,0 +1,16 @@
+*.log
+*.pyc
+__pycache__/
+processed_files.json
+.venv/
+venv/
+*.spec
+dist/
+build/
+*.tar
+test_src/
+test_dst/
+test_dst2/
+test_dst3/
+test_dst_subdir/
+test_dst_verify/

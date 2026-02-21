@@ -1,0 +1,68 @@
+{
+  "source_path": "D:/测试",
+  "output_path": "",
+  "super_copy_source": "//NAS-SID/personal_folder/Photos_照片库/旅拍/旅拍素材备份/20250816 上店村",
+  "super_copy_target": "D:/测试",
+  "image_extensions": [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".heic",
+    ".heif",
+    ".gif",
+    ".bmp",
+    ".webp",
+    ".raw",
+    ".cr2",
+    ".nef",
+    ".arw",
+    ".dng"
+  ],
+  "video_extensions": [
+    ".mp4",
+    ".mov",
+    ".mkv",
+    ".avi",
+    ".wmv",
+    ".webm",
+    ".m4v",
+    ".3gp",
+    ".mpg",
+    ".mpeg",
+    ".mts",
+    ".360",
+    ".insv",
+    ".equirectangular"
+  ],
+  "audio_extensions": [
+    ".mp3",
+    ".m4a",
+    ".wav",
+    ".aac",
+    ".flac",
+    ".ogg",
+    ".wma"
+  ],
+  "leave_in_place_extensions": [
+    ".op",
+    ".ed",
+    ".lrprev",
+    ".lock"
+  ],
+  "related_same_stem": true,
+  "date_fallback": "mtime",
+  "device_unknown_name": "未知设备",
+  "folder_structure": {
+    "date_format": "%Y-%m-%d",
+    "video_subfolder": "视频",
+    "image_subfolder": "图片",
+    "audio_subfolder": "音频",
+    "panoramic_subfolder": "全景视频",
+    "device_subfolder": true
+  },
+  "move_files": true,
+  "duplicate_strategy": "rename",
+  "delete_empty_folders": true,
+  "use_exiftool": true,
+  "unified_naming": true
+}

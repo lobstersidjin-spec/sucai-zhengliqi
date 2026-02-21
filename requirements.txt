@@ -1,0 +1,5 @@
+Pillow>=9.0.0
+hachoir-core>=1.2
+hachoir-metadata>=1.2
+hachoir-parser>=1.2
+ttkbootstrap>=1.10.0

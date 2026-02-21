@@ -1,0 +1,107 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-02-21",
+  "device_patterns": {
+    "大疆": {
+      "filename_prefixes": [
+        "DJI_",
+        "DJI",
+        "CAM_"
+      ],
+      "filename_contains": [
+        "DJI"
+      ],
+      "extensions": [
+        ".mp4",
+        ".mov",
+        ".jpg",
+        ".dng",
+        ".insv",
+        ".360",
+        ".lrf",
+        ".osv"
+      ],
+      "notes": "大疆（Mini/Osmo/Pocket/全景等，文件名中带DJI的均为大疆拍摄）"
+    },
+    "Insta360": {
+      "filename_prefixes": [
+        "VID_",
+        "IMG_"
+      ],
+      "extensions": [
+        ".insv",
+        ".360",
+        ".mp4"
+      ],
+      "notes": "Insta360（ONE X2/X3/GO 等，按品牌归类）"
+    },
+    "GoPro": {
+      "filename_prefixes": [
+        "GX01",
+        "GH01",
+        "GOPR",
+        "GP01"
+      ],
+      "extensions": [
+        ".mp4",
+        ".lrv",
+        ".thm"
+      ],
+      "notes": "GoPro（Hero 系列，按品牌归类）"
+    },
+    "Apple": {
+      "filename_prefixes": [
+        "IMG_",
+        "MOV_"
+      ],
+      "extensions": [
+        ".heic",
+        ".jpg",
+        ".mov",
+        ".mp4"
+      ],
+      "notes": "Apple iPhone/iPad"
+    },
+    "佳能": {
+      "filename_prefixes": [
+        "IMG_",
+        "MVI_",
+        "CANON"
+      ],
+      "extensions": [
+        ".cr3",
+        ".cr2",
+        ".jpg",
+        ".mp4",
+        ".mov"
+      ],
+      "notes": "佳能 Canon EOS 等"
+    },
+    "索尼": {
+      "filename_prefixes": [
+        "DSC",
+        "C"
+      ],
+      "extensions": [
+        ".arw",
+        ".jpg",
+        ".mp4",
+        ".mts"
+      ],
+      "notes": "索尼 Sony Alpha 等"
+    },
+    "尼康": {
+      "filename_prefixes": [
+        "DSC_",
+        "DSCN"
+      ],
+      "extensions": [
+        ".nef",
+        ".nrw",
+        ".jpg",
+        ".mp4"
+      ],
+      "notes": "尼康 Nikon Z 等"
+    }
+  }
+}

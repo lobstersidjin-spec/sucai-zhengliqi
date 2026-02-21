@@ -1,0 +1,58 @@
+点点素材管理大师 - Docker 部署说明（NAS 后台自动拷贝）
+
+在 NAS 上以 Docker 方式运行守护进程，监控外接设备（U 盘/移动硬盘）挂载点，插入后自动将未拷贝的新文件超级拷贝到 NAS 指定目录（按日期/类型/设备整理并做哈希校验）。
+
+一、前置条件
+
+  - NAS 支持 Docker（如群晖、威联通、OpenMediaVault 等）
+  - 外接设备在 NAS 上的挂载路径已知（常见为 /media 或 /volume1/usbshare 等）
+
+二、快速部署
+
+  1. 准备目录与配置
+  在 NAS 上创建项目目录，例如 /volume1/docker/sucai-zhengliqi，将本仓库放入后，在 data 目录下放置 config.json。
+
+  config.json 中需配置自动拷贝，例如：
+  "auto_copy": {
+    "enabled": true,
+    "watch_paths": ["/media"],
+    "target_path": "/data/target",
+    "poll_interval_sec": 60
+  }
+
+  - watch_paths：监控的挂载父目录，容器内会扫描其下一级子目录（每个子目录视为一块外接设备）。
+  - target_path：拷贝目标，建议设为 /data/target，再通过卷映射到 NAS 实际目录。
+  - poll_interval_sec：轮询间隔（秒），默认 60。
+
+  其余配置（如 image_extensions、video_extensions 等）与桌面版一致，用于筛选要拷贝的媒体类型。
+
+  2. 修改 docker-compose 卷映射
+  编辑 docker-compose.yml 中 volumes：
+  - ./data:/data：保持即可，用于持久化配置、日志与目标目录。
+  - /media:/media:ro：若 NAS 将 U 盘挂到其他路径（如 /volume1/usb），改为：/volume1/usb:/media:ro。
+  - 若希望拷贝结果直接落到 NAS 某目录，可增加：/volume1/photo/imported:/data/target，并保证 config.json 中 auto_copy.target_path 为 /data/target。
+
+  3. 启动
+  cd /volume1/docker/sucai-zhengliqi
+  docker-compose up -d
+  查看日志：docker-compose logs -f。
+
+三、行为说明
+
+  - 守护进程按 poll_interval_sec 轮询 watch_paths 下的一级子目录。
+  - 每个子目录视为一块“设备”，对其执行一次超级拷贝（与桌面版「超级拷贝」相同：媒体文件按日期/类型/设备整理并哈希校验，其余进「其他文件」）。
+  - 已拷贝过的文件在目标侧已存在时会跳过或重命名，因此只会拷贝未拷贝的新文件。
+  - 筛选标准与桌面版一致，由 config.json 中的 image_extensions、video_extensions、audio_extensions 等决定。
+
+四、环境变量
+
+  CONFIG_DIR  配置与数据目录，默认容器内为 /data，对应卷 ./data。
+  TZ          时区，建议 Asia/Shanghai。
+
+五、目录结构（容器内 /data）
+
+  config.json           主配置（含 auto_copy）。
+  device_suffixes.json  设备识别库（首次运行可自动从镜像复制）。
+  media_organizer.log   运行日志。
+  processed_files.json  已处理路径记录（用于增量）。
+  target/               拷贝目标根目录（与 auto_copy.target_path 对应）。

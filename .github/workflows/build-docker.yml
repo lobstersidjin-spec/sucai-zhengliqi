@@ -1,0 +1,43 @@
+# 点点素材管理大师 - 交付时自动构建 Docker 镜像并产出 tar 包
+# 推送代码后可在 Actions 页面下载 sucai-zhengliqi-vX.Y.tar
+
+name: Build Docker Image
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          V=$(python3 -c "import re; m=re.search(r\"__version__\s*=\s*['\\\"]([^'\\\"]+)['\\\"]\", open('media_organizer.py').read()); print(m.group(1) if m else '0.0')")
+          echo "version=$V" >> $GITHUB_OUTPUT
+          echo "Version: $V"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          docker build --build-arg VERSION="$V" -t sucai-zhengliqi:v$V .
+
+      - name: Save image to tar
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          docker save -o sucai-zhengliqi-v$V.tar sucai-zhengliqi:v$V
+          ls -la sucai-zhengliqi-v$V.tar
+
+      - name: Upload image tar
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-sucai-zhengliqi
+          path: sucai-zhengliqi-v${{ steps.version.outputs.version }}.tar

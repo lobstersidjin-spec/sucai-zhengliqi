@@ -1,0 +1,18 @@
+# 减小构建上下文，排除无关文件
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.cursor
+*.md
+docs/
+*.txt
+!requirements.txt
+build_docker.py
+*.tar
+data/
+organizer_gui.py
+main.py
+run_scan.py
